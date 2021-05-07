@@ -97,19 +97,24 @@ namespace VmodMonkeMapLoader.ComputerInterface
             }
 
             var str = new StringBuilder();
-            str.AppendClr("[^ / v] SELECT MAP        [ENTER] DETAILS", "8dc2ef").AppendLines(2);
+            str.AppendClr("[^ / v] SELECT MAP        [ENTER] DETAILS", "8dc2ef").AppendLine().Append(new String(" ".ToCharArray()[0], 34) + "ONLINE:").AppendLine();
 
             _selectionHandler.MaxIdx = _pageHandler.ItemsOnScreen - 1;
 
             _pageHandler.EnumarateElements((map, idx) =>
             {
-                var isSelected = idx == _selectionHandler.CurrentSelectionIndex;
+                // get player count stuff
+                string mapName;
+                if (!String.IsNullOrEmpty(map.PackageInfo.Config.GUID)) mapName = map.PackageInfo.Config.GUID + "_" + map.PackageInfo.Config.Version;
+                else mapName = map.PackageInfo.Descriptor.Author + "_" + map.PackageInfo.Descriptor.Name;
+                string playerCount = Behaviours.MonkeRoomManager.PlayersOnMap(mapName).ToString();
 
+                var isSelected = idx == _selectionHandler.CurrentSelectionIndex;
                 if (isSelected) str.BeginColor("8dc2ef").Append("> ");
                 else str.Append("  ");
 
                 str.Append(map.PackageInfo.Descriptor.Name.Clamp(30));
-
+                str.Append(new String(" ".ToCharArray()[0], 39 - map.PackageInfo.Descriptor.Name.Clamp(30).Length - playerCount.Length) + playerCount);
                 if (isSelected) str.EndColor();
 
                 str.AppendLine();

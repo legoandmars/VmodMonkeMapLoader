@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using Bepinject;
 using UnityEngine;
+using Photon;
+using Photon.Pun;
 
 namespace VmodMonkeMapLoader
 {
@@ -15,6 +17,12 @@ namespace VmodMonkeMapLoader
 
             HarmonyPatches.ApplyHarmonyPatches();
             Zenjector.Install<MainInstaller>().OnProject();
+
+            PhotonNetwork.NetworkingClient.EnableLobbyStatistics = true;
+            PhotonNetwork.PhotonServerSettings.AppSettings.EnableLobbyStatistics = true;
+            GameObject roomManagerObject = new GameObject("RoomManagerObject");
+            DontDestroyOnLoad(roomManagerObject);
+            roomManagerObject.AddComponent<Behaviours.MonkeRoomManager>();
         }
     }
 }
