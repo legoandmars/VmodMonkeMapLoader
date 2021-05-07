@@ -23,6 +23,7 @@ namespace VmodMonkeMapLoader
             GameObject roomManagerObject = new GameObject("RoomManagerObject");
             DontDestroyOnLoad(roomManagerObject);
             roomManagerObject.AddComponent<Behaviours.MonkeRoomManager>();
+            Helpers.MapDownloader.GetMaps();
         }
     }
 }
